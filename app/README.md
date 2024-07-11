@@ -1,1 +1,1 @@
-## Seção 6: Entendendo Path Params e o Tratamento de Exceptions no Spring Boot 3
+## Seção 8: Integrando a nossa API ao Banco de Dados MySQL
