@@ -1,1 +1,1 @@
-## Seção 6: Entendendo Path Params e o Tratamento de Exceptions no Spring Boot 3
+## Seção 7: Como usar os Verbos HTTP GET, POST, PUT e DELETE no Spring Boot
