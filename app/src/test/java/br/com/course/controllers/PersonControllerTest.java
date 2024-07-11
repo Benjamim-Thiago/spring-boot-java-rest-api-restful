@@ -2,6 +2,7 @@ package br.com.course.controllers;
 
 import br.com.course.model.Person;
 import br.com.course.services.PersonServices;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -29,6 +30,8 @@ class PersonControllerTest {
     @InjectMocks
     private PersonController controller;
 
+    private static final String BASE_URL = "/person";
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -37,25 +40,12 @@ class PersonControllerTest {
 
     @Test
     void testFindAll() throws Exception {
-        Person person1 = new Person();
-        person1.setId(1L);
-        person1.setFirstName("John");
-        person1.setLastName("Doe");
-        person1.setAddress("123 Street");
-        person1.setGender("Male");
-
-        Person person2 = new Person();
-        person2.setId(2L);
-        person2.setFirstName("Jane");
-        person2.setLastName("Doe");
-        person2.setAddress("456 Avenue");
-        person2.setGender("Female");
-
-        List<Person> persons = Arrays.asList(person1, person2);
+        List<Person> persons = Arrays.asList(createPerson(1L, "John", "Doe", "123 Street", "Male"),
+                createPerson(2L, "Jane", "Doe", "456 Avenue", "Female"));
 
         when(service.findAll()).thenReturn(persons);
 
-        mockMvc.perform(get("/person")
+        mockMvc.perform(get(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
@@ -72,19 +62,15 @@ class PersonControllerTest {
 
     @Test
     void testFindById() throws Exception {
-        Person person = new Person();
-        person.setId(1L);
-        person.setFirstName("John");
-        person.setLastName("Doe");
-        person.setAddress("123 Street");
-        person.setGender("Male");
+        Long id = 1L;
+        Person person = createPerson(id, "John", "Doe", "123 Street", "Male");
 
-        when(service.findById("1")).thenReturn(person);
+        when(service.findById(id)).thenReturn(person);
 
-        mockMvc.perform(get("/person/1")
+        mockMvc.perform(get(BASE_URL + "/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.firstName").value("John"))
                 .andExpect(jsonPath("$.lastName").value("Doe"))
                 .andExpect(jsonPath("$.address").value("123 Street"))
@@ -93,18 +79,13 @@ class PersonControllerTest {
 
     @Test
     void testCreate() throws Exception {
-        Person person = new Person();
-        person.setId(1L);
-        person.setFirstName("John");
-        person.setLastName("Doe");
-        person.setAddress("123 Street");
-        person.setGender("Male");
+        Person person = createPerson(null, "John", "Doe", "123 Street", "Male");
+        Person personSaved = createPerson(1L, "John", "Doe", "123 Street", "Male");
 
-        when(service.create(any(Person.class))).thenReturn(person);
-
-        mockMvc.perform(post("/person")
+        when(service.create(any(Person.class))).thenReturn(personSaved);
+        mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"firstName\": \"John\", \"lastName\": \"Doe\", \"address\": \"123 Street\", \"gender\": \"Male\"}"))
+                        .content(asJsonString(person)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.firstName").value("John"))
@@ -115,20 +96,16 @@ class PersonControllerTest {
 
     @Test
     void testUpdate() throws Exception {
-        Person person = new Person();
-        person.setId(1L);
-        person.setFirstName("John");
-        person.setLastName("Doe");
-        person.setAddress("123 Street");
-        person.setGender("Male");
+        Long id = 1L;
+        Person person = createPerson(id, "John", "Doe", "123 Street", "Male");
 
         when(service.update(any(Person.class))).thenReturn(person);
 
-        mockMvc.perform(put("/person")
+        mockMvc.perform(put(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": \"1\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"address\": \"123 Street\", \"gender\": \"Male\"}"))
+                        .content(asJsonString(person)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.firstName").value("John"))
                 .andExpect(jsonPath("$.lastName").value("Doe"))
                 .andExpect(jsonPath("$.address").value("123 Street"))
@@ -137,8 +114,29 @@ class PersonControllerTest {
 
     @Test
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/person/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        Long id = 1L;
+
+        mockMvc.perform(delete(BASE_URL + "/" + id))
+                .andExpect(status().isNoContent());
+
+        verify(service, times(1)).delete(id);
+    }
+
+    private Person createPerson(Long id, String firstName, String lastName, String address, String gender) {
+        Person person = new Person();
+        person.setId(id);
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setAddress(address);
+        person.setGender(gender);
+        return person;
+    }
+
+    private String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

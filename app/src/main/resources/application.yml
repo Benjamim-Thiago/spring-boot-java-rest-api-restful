@@ -1,1 +1,13 @@
-spring.application.name=springboot3
+spring:
+  application:
+    name: app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/course-spring-boot
+    username: docker
+    password: docker
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
