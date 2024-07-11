@@ -1,1 +1,1 @@
-## Seção 7: Como usar os Verbos HTTP GET, POST, PUT e DELETE no Spring Boot
+## Seção 8: Integrando a nossa API ao Banco de Dados MySQL
