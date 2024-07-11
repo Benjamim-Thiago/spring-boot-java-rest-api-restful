@@ -1,1 +1,1 @@
-Seção 5: Primeiros Passos em Spring Boot 3 com Java 18
+## Seção 6: Entendendo Path Params e o Tratamento de Exceptions no Spring Boot 3
