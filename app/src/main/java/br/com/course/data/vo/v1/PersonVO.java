@@ -1,10 +1,14 @@
 package br.com.course.data.vo.v1;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
+@JsonPropertyOrder({"id", "address", "first_name", "last_name", "gender"})
 public class PersonVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -12,9 +16,14 @@ public class PersonVO implements Serializable {
 
 	@NotBlank(message = "First name is required")
 	@Size(min = 2, max = 80, message = "First name must be between 2 and 80 characters")
+	@JsonProperty("first_name")
 	private String firstName;
+
+	@JsonProperty("last_name")
 	private String lastName;
 	private String address;
+
+	@JsonIgnore
 	private String gender;
 	
 	public PersonVO() {}
