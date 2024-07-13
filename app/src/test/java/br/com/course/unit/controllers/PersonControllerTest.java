@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import br.com.course.data.vo.v1.model.PersonVO;
+import br.com.course.data.vo.v1.PersonVO;
 import br.com.course.services.PersonServices;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

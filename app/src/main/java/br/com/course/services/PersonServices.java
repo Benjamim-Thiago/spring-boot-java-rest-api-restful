@@ -5,8 +5,10 @@ import java.util.logging.Logger;
 
 import br.com.course.Validation.EntityInUseException;
 import br.com.course.Validation.EntityNotExistException;
-import br.com.course.data.vo.v1.model.PersonVO;
+import br.com.course.data.vo.v1.PersonVO;
+import br.com.course.data.vo.v2.PersonVOV2;
 import br.com.course.mapper.Mapper;
+import br.com.course.mapper.custom.PersonMapper;
 import br.com.course.model.Person;
 import br.com.course.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class PersonServices {
 	
 	@Autowired
 	PersonRepository repository;
+
+	@Autowired
+	PersonMapper mapper;
 
 	public List<PersonVO> findAll() {
 
@@ -45,7 +50,17 @@ public class PersonServices {
         var vo =  Mapper.parseObject(repository.save(entity), PersonVO.class);
         return vo;
     }
-	
+
+	@Transactional
+	public PersonVOV2 createV2(PersonVOV2 person) {
+
+		logger.info("Creating one person with V2!");
+		var entity = mapper.convertVoTOEntity(person);
+		var vo =  mapper.convertEntityToVo(repository.save(entity));
+		return vo;
+	}
+
+	@Transactional
 	public PersonVO update(PersonVO person) {
 		
 		logger.info("Updating one person!");
