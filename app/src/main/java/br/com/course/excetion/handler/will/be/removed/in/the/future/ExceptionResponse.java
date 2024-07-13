@@ -1,4 +1,4 @@
-package br.com.course.excetion;
+package br.com.course.excetion.handler.will.be.removed.in.the.future;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -11,11 +11,9 @@ public class PersonVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 
-	@NotBlank(message = "First name is mandatory")
+	@NotBlank(message = "First name is required")
 	@Size(min = 2, max = 80, message = "First name must be between 2 and 80 characters")
 	private String firstName;
-
-	@NotBlank(message = "Last name is mandatory")
 	private String lastName;
 	private String address;
 	private String gender;

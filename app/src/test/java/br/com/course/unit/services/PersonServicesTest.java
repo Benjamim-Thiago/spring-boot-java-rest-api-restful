@@ -1,7 +1,7 @@
 package br.com.course.unit.services;
 
+import br.com.course.Validation.EntityNotExistException;
 import br.com.course.data.vo.v1.model.PersonVO;
-import br.com.course.excetion.ResourceNotFoundException;
 import br.com.course.model.Person;
 import br.com.course.repositories.PersonRepository;
 import br.com.course.services.PersonServices;
@@ -103,7 +103,7 @@ class PersonServicesTest {
     void testFindById_NotFound() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+        Exception exception = assertThrows(EntityNotExistException.class, () -> {
             service.findById(1L);
         });
 
@@ -146,7 +146,7 @@ class PersonServicesTest {
     void testUpdate_NotFound() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+        Exception exception = assertThrows(EntityNotExistException.class, () -> {
             service.update(personVO1);
         });
 
@@ -172,7 +172,7 @@ class PersonServicesTest {
     void testDelete_NotFound() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+        Exception exception = assertThrows(EntityNotExistException.class, () -> {
             service.delete(1L);
         });
 
