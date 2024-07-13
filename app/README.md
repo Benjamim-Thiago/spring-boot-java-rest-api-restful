@@ -1,1 +1,1 @@
-## Seção 8: Integrando a nossa API ao Banco de Dados MySQL
+## Seção 9: O Padrão de Projetos VO (Value Object)
