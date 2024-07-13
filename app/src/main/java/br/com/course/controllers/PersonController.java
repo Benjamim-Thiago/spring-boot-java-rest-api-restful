@@ -4,7 +4,8 @@ import java.util.List;
 
 import br.com.course.Validation.BusinessException;
 import br.com.course.Validation.EntityNotExistException;
-import br.com.course.data.vo.v1.model.PersonVO;
+import br.com.course.data.vo.v1.PersonVO;
+import br.com.course.data.vo.v2.PersonVOV2;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -47,7 +48,16 @@ public class PersonController {
 		} catch (EntityNotExistException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
+	}
 
+	@PostMapping(value = "/v2", consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
+		try {
+			return service.createV2(person);
+		} catch (EntityNotExistException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,

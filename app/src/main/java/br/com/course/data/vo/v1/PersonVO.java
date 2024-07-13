@@ -1,7 +1,6 @@
-package br.com.course.data.vo.v1.model;
+package br.com.course.data.vo.v1;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;

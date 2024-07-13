@@ -1,7 +1,7 @@
 package br.com.course.unit.services;
 
 import br.com.course.Validation.EntityNotExistException;
-import br.com.course.data.vo.v1.model.PersonVO;
+import br.com.course.data.vo.v1.PersonVO;
 import br.com.course.model.Person;
 import br.com.course.repositories.PersonRepository;
 import br.com.course.services.PersonServices;

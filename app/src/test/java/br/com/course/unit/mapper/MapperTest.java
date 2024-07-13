@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.course.data.vo.v1.model.PersonVO;
+import br.com.course.data.vo.v1.PersonVO;
 import br.com.course.mapper.Mapper;
 import br.com.course.model.Person;
 import org.junit.jupiter.api.BeforeEach;
