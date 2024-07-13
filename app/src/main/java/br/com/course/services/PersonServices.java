@@ -3,17 +3,21 @@ package br.com.course.services;
 import java.util.List;
 import java.util.logging.Logger;
 
+import br.com.course.Validation.EntityInUseException;
+import br.com.course.Validation.EntityNotExistException;
 import br.com.course.data.vo.v1.model.PersonVO;
-import br.com.course.excetion.ResourceNotFoundException;
 import br.com.course.mapper.Mapper;
 import br.com.course.model.Person;
 import br.com.course.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PersonServices {
-	
+
 	private Logger logger = Logger.getLogger(PersonServices.class.getName());
 	
 	@Autowired
@@ -29,14 +33,13 @@ public class PersonServices {
 	public PersonVO findById(Long id) {
 		
 		logger.info("Finding one person!");
-		
 		var entity = repository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+			.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
 		return Mapper.parseObject(entity, PersonVO.class);
 	}
-	
-	public PersonVO create(PersonVO person) {
 
+	@Transactional
+	public PersonVO create(PersonVO person) {
         logger.info("Creating one person!");
         var entity = Mapper.parseObject(person, Person.class);
         var vo =  Mapper.parseObject(repository.save(entity), PersonVO.class);
@@ -48,7 +51,7 @@ public class PersonServices {
 		logger.info("Updating one person!");
 		
 		var entity = repository.findById(person.getId())
-			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+			.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
 
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
@@ -60,11 +63,16 @@ public class PersonServices {
 	}
 	
 	public void delete(Long id) {
-		
-		logger.info("Deleting one person!");
-		
-		var entity = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-		repository.delete(entity);
+		try {
+			logger.info("Deleting one person!");
+
+			var entity = repository.findById(id)
+					.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
+			repository.delete(entity);
+		} catch (EmptyResultDataAccessException e) {
+			throw new EntityNotExistException("No records found for this ID!");
+		} catch (DataIntegrityViolationException e) {
+			throw new EntityInUseException("Entity cannot be removed as there is information linked to the entity");
+		}
 	}
 }

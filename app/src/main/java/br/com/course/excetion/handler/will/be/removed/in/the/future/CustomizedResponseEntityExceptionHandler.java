@@ -1,18 +1,15 @@
-package br.com.course.excetion.handler;
+package br.com.course.excetion.handler.will.be.removed.in.the.future;
 
 import java.util.Date;
 
-import br.com.course.excetion.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.course.excetion.ResourceNotFoundException;
-
-@ControllerAdvice
-@RestController
+//@ControllerAdvice
+//@RestController
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(Exception.class)

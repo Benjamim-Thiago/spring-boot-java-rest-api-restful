@@ -2,6 +2,8 @@ package br.com.course.controllers;
 
 import java.util.List;
 
+import br.com.course.Validation.BusinessException;
+import br.com.course.Validation.EntityNotExistException;
 import br.com.course.data.vo.v1.model.PersonVO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,13 @@ public class PersonController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public PersonVO create(@RequestBody @Valid PersonVO person) {
-		return service.create(person);
+		try {
+			return service.create(person);
+
+		} catch (EntityNotExistException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
