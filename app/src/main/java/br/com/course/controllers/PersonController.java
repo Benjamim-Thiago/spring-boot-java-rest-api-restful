@@ -6,9 +6,11 @@ import br.com.course.Validation.BusinessException;
 import br.com.course.Validation.EntityNotExistException;
 import br.com.course.data.vo.v1.PersonVO;
 import br.com.course.data.vo.v2.PersonVOV2;
+import br.com.course.util.MediaType;
+
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,19 +30,31 @@ public class PersonController {
 	@Autowired
 	private PersonServices service;
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			})
 	public List<PersonVO> findAll() {
 		return service.findAll();
 	}
 	
 	@GetMapping(value = "/{id}",
-			produces = MediaType.APPLICATION_JSON_VALUE)
+			produces = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			})
 	public PersonVO findById(@PathVariable(value = "id") Long id) {
 		return service.findById(id);
 	}
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			},
+			produces = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			})
 	public PersonVO create(@RequestBody @Valid PersonVO person) {
 		try {
 			return service.create(person);
@@ -50,8 +64,14 @@ public class PersonController {
 		}
 	}
 
-	@PostMapping(value = "/v2", consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/v2", consumes = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			},
+			produces = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			})
 	public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
 		try {
 			return service.createV2(person);
@@ -60,8 +80,14 @@ public class PersonController {
 		}
 	}
 	
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(consumes = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			},
+			produces = { MediaType.APPLICATION_JSON,
+			MediaType.APPLICATION_XML,
+			MediaType.APPLICATION_YML 
+			})
 	public PersonVO update(@RequestBody PersonVO person) {
 		return service.update(person);
 	}
