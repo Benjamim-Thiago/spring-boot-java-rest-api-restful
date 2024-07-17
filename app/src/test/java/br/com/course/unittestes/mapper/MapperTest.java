@@ -1,4 +1,4 @@
-package br.com.course.unit.mapper;
+package br.com.course.unittestes.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +26,7 @@ class MapperTest {
         person.setGender("Male");
 
         personVO = new PersonVO();
-        personVO.setId(1L);
+        personVO.setKey(1L);
         personVO.setFirstName("John");
         personVO.setLastName("Doe");
         personVO.setAddress("123 Main St");
@@ -38,7 +38,7 @@ class MapperTest {
         PersonVO vo = Mapper.parseObject(person, PersonVO.class);
 
         assertNotNull(vo);
-        assertEquals(person.getId(), vo.getId());
+        assertEquals(person.getId(), vo.getKey());
         assertEquals(person.getFirstName(), vo.getFirstName());
         assertEquals(person.getLastName(), vo.getLastName());
         assertEquals(person.getAddress(), vo.getAddress());
@@ -54,7 +54,7 @@ class MapperTest {
         assertEquals(1, voList.size());
 
         PersonVO vo = voList.get(0);
-        assertEquals(person.getId(), vo.getId());
+        assertEquals(person.getId(), vo.getKey());
         assertEquals(person.getFirstName(), vo.getFirstName());
         assertEquals(person.getLastName(), vo.getLastName());
         assertEquals(person.getAddress(), vo.getAddress());
