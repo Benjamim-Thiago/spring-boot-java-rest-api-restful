@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import br.com.course.Validation.EntityInUseException;
 import br.com.course.Validation.EntityNotExistException;
+import br.com.course.Validation.RequiredObjectIsNullException;
+import br.com.course.controllers.PersonController;
 import br.com.course.data.vo.v1.PersonVO;
 import br.com.course.data.vo.v2.PersonVOV2;
 import br.com.course.mapper.Mapper;
@@ -12,10 +14,13 @@ import br.com.course.mapper.custom.PersonMapper;
 import br.com.course.model.Person;
 import br.com.course.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class PersonServices {
@@ -32,29 +37,42 @@ public class PersonServices {
 
 		logger.info("Finding all people!");
 
-		return Mapper.parseListObjects(repository.findAll(), PersonVO.class);
+		var persons = Mapper.parseListObjects(repository.findAll(), PersonVO.class);
+		persons
+				.stream()
+				.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+		return persons;
 	}
 
 	public PersonVO findById(Long id) {
 		
 		logger.info("Finding one person!");
+
 		var entity = repository.findById(id)
-			.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
-		return Mapper.parseObject(entity, PersonVO.class);
+				.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
+		var vo = Mapper.parseObject(entity, PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return vo;
 	}
 
 	@Transactional
 	public PersonVO create(PersonVO person) {
+		if (person == null) throw new RequiredObjectIsNullException();
+
         logger.info("Creating one person!");
-        var entity = Mapper.parseObject(person, Person.class);
-        var vo =  Mapper.parseObject(repository.save(entity), PersonVO.class);
-        return vo;
+
+		var entity = Mapper.parseObject(person, Person.class);
+		var vo =  Mapper.parseObject(repository.save(entity), PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
+		return vo;
     }
 
 	@Transactional
 	public PersonVOV2 createV2(PersonVOV2 person) {
+		if (person == null) throw new RequiredObjectIsNullException();
 
 		logger.info("Creating one person with V2!");
+
 		var entity = mapper.convertVoTOEntity(person);
 		var vo =  mapper.convertEntityToVo(repository.save(entity));
 		return vo;
@@ -62,18 +80,20 @@ public class PersonServices {
 
 	@Transactional
 	public PersonVO update(PersonVO person) {
-		
+		if (person == null) throw new RequiredObjectIsNullException();
+
 		logger.info("Updating one person!");
-		
-		var entity = repository.findById(person.getId())
-			.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
+
+		var entity = repository.findById(person.getKey())
+				.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
 
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
-		
+
 		var vo =  Mapper.parseObject(repository.save(entity), PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
 		return vo;
 	}
 	
