@@ -8,9 +8,7 @@ import br.com.course.Validation.EntityNotExistException;
 import br.com.course.Validation.RequiredObjectIsNullException;
 import br.com.course.controllers.PersonController;
 import br.com.course.data.vo.v1.PersonVO;
-import br.com.course.data.vo.v2.PersonVOV2;
 import br.com.course.mapper.Mapper;
-import br.com.course.mapper.custom.PersonMapper;
 import br.com.course.model.Person;
 import br.com.course.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +27,6 @@ public class PersonServices {
 	
 	@Autowired
 	PersonRepository repository;
-
-	@Autowired
-	PersonMapper mapper;
 
 	public List<PersonVO> findAll() {
 
@@ -66,17 +61,6 @@ public class PersonServices {
 		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
 		return vo;
     }
-
-	@Transactional
-	public PersonVOV2 createV2(PersonVOV2 person) {
-		if (person == null) throw new RequiredObjectIsNullException();
-
-		logger.info("Creating one person with V2!");
-
-		var entity = mapper.convertVoTOEntity(person);
-		var vo =  mapper.convertEntityToVo(repository.save(entity));
-		return vo;
-	}
 
 	@Transactional
 	public PersonVO update(PersonVO person) {

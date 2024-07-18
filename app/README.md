@@ -1,1 +1,1 @@
-## Seção 14: Implementando HATEOAS (Hypermedia as the Engine of Application State)
+## Seção 15: Adicionando o Suporte ao Swagger (Open API)
