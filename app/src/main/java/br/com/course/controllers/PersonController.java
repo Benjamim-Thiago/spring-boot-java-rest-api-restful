@@ -46,7 +46,7 @@ public class PersonController {
 					@ApiResponse(description = "Success", responseCode = "200",
 							content = {
 									@Content(
-											mediaType = "application/json",
+											// mediaType = MediaType.APPLICATION_JSON,
 											array = @ArraySchema(schema = @Schema(implementation = PersonVO.class))
 									)
 							}),
