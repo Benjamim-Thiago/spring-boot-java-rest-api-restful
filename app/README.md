@@ -1,1 +1,1 @@
-## Seção 15: Adicionando o Suporte ao Swagger (Open API)
+## Seção 16: Configurando Cross-Origin Resource Sharing (CORS)

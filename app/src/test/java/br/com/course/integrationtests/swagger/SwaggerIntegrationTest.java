@@ -3,10 +3,10 @@ package br.com.course.integrationtests.swagger;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
+import br.com.course.configs.TestConfigs;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.com.course.configs.TestConfigs;
 import br.com.course.integrationtests.testcontainers.AbstractIntegrationTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
