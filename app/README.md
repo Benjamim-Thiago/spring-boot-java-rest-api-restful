@@ -1,1 +1,1 @@
-## Seção 16: Configurando Cross-Origin Resource Sharing (CORS)
+## Seção 17: Autenticação com JWT e Spring Security

@@ -320,21 +320,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
-//TODO  Fazer no modulo de springsecurity do curso
-//
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-//
-//        HttpStatus status = HttpStatus.FORBIDDEN;
-//        ProblemType problemType = ProblemType.ACCESS_DENIED;
-//        String detail = ex.getMessage();
-//
-//        Problem problem = createProblemBuilder(status, problemType, detail)
-//                .userMessage(detail)
-//                .userMessage("Você não possui permissão para executar essa operação.")
-//                .build();
-//
-//        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-//    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ProblemType problemType = ProblemType.ACCESS_DENIED;
+        String detail = ex.getMessage();
+
+        Problem problem = new Problem();
+        problem.setStatus(status.value());
+        problem.setTimestamp(OffsetDateTime.now());
+        problem.setType(problemType.getUri());
+        problem.setTitle(problemType.getTitle());
+        problem.setDetail(detail);
+        problem.setUserMessage("Você não possui permissão para executar essa operação.");
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
 
 }
