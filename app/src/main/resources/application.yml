@@ -1,3 +1,11 @@
+cors:
+  originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
+security:
+  jwt:
+    token:
+      secret-key: hjNa84upnc9mGXORXwQX
+      expire-access-token-length: 3600000
+      expire-refresh-token-length: 10800000
 spring:
   application:
     name: app
@@ -9,3 +17,9 @@ spring:
   jpa:
     open-in-view: false
     show-sql: false
+springdoc:
+  pathsToMatch:
+    - /auth/**
+    - /api/**/v1/**
+  swagger-ui:
+    use-root-path: true

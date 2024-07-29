@@ -1,1 +1,1 @@
-## Seção 14: Implementando HATEOAS (Hypermedia as the Engine of Application State)
+## Seção 17: Autenticação com JWT e Spring Security
