@@ -59,7 +59,7 @@ class BookServicesTest {
 		assertEquals("Author Test 1", result.getAuthor());
 		assertEquals(10.50 + entity.getId(), result.getPrice());
 		assertEquals("Test book 1", result.getTitle());
-		assertEquals(LocalDate.of(2024, 7, 18), result.getLaunchDate());
+		assertEquals(new Date(), result.getLaunchDate());
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ class BookServicesTest {
 		assertEquals("Author Test 1", result.getAuthor());
 		assertEquals(10.50 + vo.getKey(), result.getPrice());
 		assertEquals("Test book 1", result.getTitle());
-		assertEquals(LocalDate.of(2024, 7, 18), result.getLaunchDate());
+		assertEquals(new Date(), result.getLaunchDate());
 	}
 	
 	@Test
@@ -125,7 +125,7 @@ class BookServicesTest {
 		assertEquals("Author Test 1", result.getAuthor());
 		assertEquals(10.50 + vo.getKey(), result.getPrice());
 		assertEquals("Test book 1", result.getTitle());
-		assertEquals(LocalDate.of(2024, 7, 18), result.getLaunchDate());
+		assertEquals(new Date(), result.getLaunchDate());
 	}
 	
 
@@ -173,7 +173,7 @@ class BookServicesTest {
 		assertEquals("Author Test 1", bookOne.getAuthor());
 		assertEquals(10.50 + bookOne.getKey(), bookOne.getPrice());
 		assertEquals("Test book 1", bookOne.getTitle());
-		assertEquals(LocalDate.of(2024, 7, 18), bookOne.getLaunchDate());
+		assertEquals(new Date(), bookOne.getLaunchDate());
 		
 		var bookFour = people.get(4);
 		
@@ -185,7 +185,7 @@ class BookServicesTest {
 		assertEquals("Author Test 4", bookFour.getAuthor());
 		assertEquals(10.50 + bookFour.getKey(), bookFour.getPrice());
 		assertEquals("Test book 4", bookFour.getTitle());
-		assertEquals(LocalDate.of(2024, 7, 18), bookFour.getLaunchDate());
+		assertEquals(new Date(), bookFour.getLaunchDate());
 		
 		var bookSeven = people.get(7);
 		
@@ -197,7 +197,7 @@ class BookServicesTest {
 		assertEquals("Author Test 7", bookSeven.getAuthor());
 		assertEquals(10.50 + bookSeven.getKey(), bookSeven.getPrice());
 		assertEquals("Test book 7", bookSeven.getTitle());
-		assertEquals(LocalDate.of(2024, 7, 18), bookSeven.getLaunchDate());
+		assertEquals(new Date(), bookSeven.getLaunchDate());
 
 	}
 

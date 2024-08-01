@@ -42,7 +42,7 @@ public class MockBook {
         book.setAuthor("Author Test " + number);
         book.setPrice(10.50 + number);
         book.setTitle("Test book " + number);
-        book.setLaunchDate(LocalDate.of(2024, 7, 18));
+        book.setLaunchDate(new Date());
         return book;
     }
 
@@ -52,7 +52,7 @@ public class MockBook {
         book.setAuthor("Author Test " + number);
         book.setPrice(10.50 + number);
         book.setTitle("Test book " + number);
-        book.setLaunchDate(LocalDate.of(2024, 7, 18));
+        book.setLaunchDate(new Date());
         return book;
     }
 
