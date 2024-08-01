@@ -1,16 +1,23 @@
 package br.com.course.integrationtests.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
 
-
+@XmlRootElement
 public class PersonVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+
 	private String firstName;
+
 	private String lastName;
+
 	private String address;
+
 	private String gender;
 	
 	public PersonVO() {}

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.1</version>
+		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.course</groupId>
@@ -29,20 +29,17 @@
 	<properties>
 		<java.version>17</java.version>
 		<dozer.version>7.0.0</dozer.version>
-		<junit-jupiter-engine.version>5.7.0</junit-jupiter-engine.version>
 		<mockito-junit-jupiter.version>3.6.0</mockito-junit-jupiter.version>
 		<mockito-core.version>3.6.0</mockito-core.version>
 		<spring-doc.version>2.6.0</spring-doc.version>
-		<rest-assured.version>5.2.0</rest-assured.version>
 		<java-jwt.version>4.4.0</java-jwt.version>
+
+
+		<junit-jupiter.version>5.9.3</junit-jupiter.version>
+		<rest-assured.version>5.3.0</rest-assured.version>
+		<testcontainers.version>1.17.6</testcontainers.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit-jupiter-engine.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -89,16 +86,31 @@
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>postgresql</artifactId>
+			<version>${rest-assured.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -13,4 +13,5 @@ public class TestConfigs {
 
 	public static final String ORIGIN_ERUDIO = "https://erudio.com.br";
 	public static final String ORIGIN_SEMERU = "https://semeru.com.br";
+	public static final String ORIGIN_LOCALHOST = "http://localhost";
 }

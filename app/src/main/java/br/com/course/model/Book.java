@@ -1,7 +1,7 @@
 package br.com.course.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +27,7 @@ public class Book implements Serializable {
 
 	@Column(name = "launch_date", nullable = false)
 	@Temporal(TemporalType.DATE)
-	private LocalDate launchDate;
+	private Date launchDate;
 	
 	@Column(nullable = false)
 	private Double price;
@@ -53,11 +53,11 @@ public class Book implements Serializable {
 		this.author = author;
 	}
 
-	public LocalDate getLaunchDate() {
+	public Date getLaunchDate() {
 		return launchDate;
 	}
 
-	public void setLaunchDate(LocalDate launchDate) {
+	public void setLaunchDate(Date launchDate) {
 		this.launchDate = launchDate;
 	}
 
