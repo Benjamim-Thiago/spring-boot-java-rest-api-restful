@@ -16,8 +16,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
 
 
 @Service
@@ -28,6 +35,9 @@ public class PersonServices {
 	@Autowired
 	PersonRepository repository;
 
+	@Autowired
+	PagedResourcesAssembler<PersonVO> assembler;
+
 	public List<PersonVO> findAll() {
 
 		logger.info("Finding all people!");
@@ -37,6 +47,54 @@ public class PersonServices {
 				.stream()
 				.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 		return persons;
+	}
+
+	public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
+		logger.info("Finding all people!");
+
+		List<Sort.Order> orderList = pageable.getSort().toList();
+		Sort.Order order = orderList.get(0);
+
+		var peoplePage = repository.findAll(pageable);
+
+		var personVosPage = peoplePage.map(p -> Mapper.parseObject(p, PersonVO.class));
+		personVosPage.map(
+				p -> p.add(
+						linkTo(methodOn(PersonController.class)
+								.findById(p.getKey())).withSelfRel()));
+
+		Link link = linkTo(
+				methodOn(PersonController.class)
+						.findAll(pageable.getPageNumber(),
+								pageable.getPageSize(),
+								order.getDirection().toString(),
+								order.getProperty())).withSelfRel();
+
+		return assembler.toModel(personVosPage, link);
+	}
+
+	public PagedModel<EntityModel<PersonVO>> findPeopleByFirstName(String firstName, Pageable pageable) {
+		logger.info("Finding all people!");
+
+		List<Sort.Order> orderList = pageable.getSort().toList();
+		Sort.Order order = orderList.get(0);
+
+		var peoplePage = repository.findPeopleByName(firstName, pageable);
+
+		var personVosPage = peoplePage.map(p -> Mapper.parseObject(p, PersonVO.class));
+		personVosPage.map(
+				p -> p.add(
+						linkTo(methodOn(PersonController.class)
+								.findById(p.getKey())).withSelfRel()));
+
+		Link link = linkTo(
+				methodOn(PersonController.class)
+						.findAll(pageable.getPageNumber(),
+								pageable.getPageSize(),
+								order.getDirection().toString(),
+								order.getProperty())).withSelfRel();
+
+		return assembler.toModel(personVosPage, link);
 	}
 
 	public PersonVO findById(Long id) {
@@ -78,6 +136,20 @@ public class PersonServices {
 
 		var vo =  Mapper.parseObject(repository.save(entity), PersonVO.class);
 		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
+		return vo;
+	}
+
+	@Transactional
+	public PersonVO disablePerson(Long id) {
+
+		logger.info("Disabling one person!");
+
+		repository.disablePerson(id);
+
+		var entity = repository.findById(id)
+				.orElseThrow(() -> new EntityNotExistException("No records found for this ID!"));
+		var vo = Mapper.parseObject(entity, PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
 		return vo;
 	}
 	

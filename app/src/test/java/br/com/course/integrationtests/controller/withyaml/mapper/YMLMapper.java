@@ -13,9 +13,9 @@ import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 
 public class YMLMapper implements ObjectMapper{
-	
+
 	private Logger logger = Logger.getLogger(YMLMapper.class.getName());
-	
+
 	private com.fasterxml.jackson.databind.ObjectMapper objectMapper;
 	protected TypeFactory typeFactory;
 
@@ -31,15 +31,15 @@ public class YMLMapper implements ObjectMapper{
 		try {
 			String dataToDeserialize = context.getDataToDeserialize().asString();
 			Class type = (Class)context.getType();
-			
-            logger.info("Trying deserialize object of type" + type);
+
+			logger.info("Trying deserialize object of type" + type);
 
 			return objectMapper.readValue(dataToDeserialize, typeFactory.constructType(type));
 		} catch (JsonMappingException e) {
-            logger.severe("Error deserializing object");
+			logger.severe("Error deserializing object");
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-            logger.severe("Error deserializing object");
+			logger.severe("Error deserializing object");
 			e.printStackTrace();
 		}
 		return null;

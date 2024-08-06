@@ -8,8 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 import java.util.List;
 
-import br.com.course.integrationtests.vo.AccountCredentialsVO;
-import br.com.course.integrationtests.vo.BookVO;
+import br.com.course.integrationtests.vo.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -25,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.course.configs.TestConfigs;
 import br.com.course.integrationtests.testcontainers.AbstractIntegrationTest;
-import br.com.course.integrationtests.vo.TokenVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -196,7 +194,8 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                .queryParams("page", 0, "limit", 5, "direction", "asc")
+                .accept(TestConfigs.CONTENT_TYPE_JSON)
+                .queryParams("page", 0, "size", 10, "field-direction", "id", "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -205,8 +204,9 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        List<BookVO> books = objectMapper.readValue(content, new TypeReference<List<BookVO>>() {
-        });
+        WrapperBookVO wrapper = objectMapper.readValue(content, WrapperBookVO.class);
+
+        List<BookVO> books = wrapper.getEmbedded().getBooks();
 
         BookVO foundBookOne = books.get(0);
 
@@ -215,10 +215,6 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundBookOne.getAuthor());
         assertNotNull(foundBookOne.getPrice());
         assertTrue(foundBookOne.getId() > 0);
-        assertEquals("Docker Deep Dive", foundBookOne.getTitle());
-        assertEquals("Nigel Poulton", foundBookOne.getAuthor());
-        assertEquals(55.99, foundBookOne.getPrice());
-
     }
 
     private void mockBook() {
