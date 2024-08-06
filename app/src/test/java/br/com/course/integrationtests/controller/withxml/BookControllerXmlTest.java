@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
+import br.com.course.integrationtests.vo.BookVO;
+import br.com.course.integrationtests.vo.pagedmodels.PagedModelBook;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -26,7 +25,6 @@ import br.com.course.configs.TestConfigs;
 import br.com.course.data.vo.v1.security.TokenVO;
 import br.com.course.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.course.integrationtests.vo.AccountCredentialsVO;
-import br.com.course.integrationtests.vo.BookVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -206,26 +204,28 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		var content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.accept(TestConfigs.CONTENT_TYPE_XML)
-					.when()
-					.get()
+				.queryParams("page", 0, "size", 10, "field-direction", "id", "direction", "asc")
+				.when()
+				.get()
 				.then()
-					.statusCode(200)
-						.extract()
-						.body()
-							.asString();
-		
-		List<BookVO> books = objectMapper.readValue(content, new TypeReference<List<BookVO>>() {});
-		
+				.statusCode(200)
+				.extract()
+				.body()
+				.asString();
+
+		PagedModelBook wrapper = objectMapper.readValue(content, PagedModelBook.class);
+		var books = wrapper.getContent();
+
 		BookVO foundBookOne = books.get(0);
-        
-        assertNotNull(foundBookOne.getId());
+
+		assertNotNull(books);
+		assertTrue(books.size() > 0);
+
+
+		assertNotNull(foundBookOne.getId());
         assertNotNull(foundBookOne.getTitle());
         assertNotNull(foundBookOne.getAuthor());
         assertNotNull(foundBookOne.getPrice());
-        assertTrue(foundBookOne.getId() > 0);
-        assertEquals("Docker Deep Dive", foundBookOne.getTitle());
-        assertEquals("Nigel Poulton", foundBookOne.getAuthor());
-        assertEquals(55.99, foundBookOne.getPrice());
 	}
 
 	

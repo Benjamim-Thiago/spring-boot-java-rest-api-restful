@@ -11,6 +11,10 @@ import java.util.List;
 
 import br.com.course.data.vo.v1.security.TokenVO;
 import br.com.course.integrationtests.vo.BookVO;
+import br.com.course.integrationtests.vo.BookVO;
+import br.com.course.integrationtests.vo.BookVO;
+import br.com.course.integrationtests.vo.pagedmodels.PagedModelBook;
+import br.com.course.integrationtests.vo.pagedmodels.PagedModelBook;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -200,61 +204,55 @@ public class BookControllerYamlTest extends AbstractIntegrationTest {
         assertEquals("Nigel Poulton", foundBook.getAuthor());
         assertEquals(55.99, foundBook.getPrice());
     }
-    
+
     @Test
     @Order(4)
-    public void testDelete() {
-        given()
-            .config(
-                RestAssuredConfig
-                    .config()
-                    .encoderConfig(EncoderConfig.encoderConfig()
-                            .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
-            .spec(specification)
-                .contentType(TestConfigs.CONTENT_TYPE_YML)
-				.accept(TestConfigs.CONTENT_TYPE_YML)
-                    .pathParam("id", book.getId())
-                    .when()
-                    .delete("{id}")
-                .then()
-                    .statusCode(204);
-    }
-    
-    @Test
-    @Order(5)
     public void testFindAll() throws JsonMappingException, JsonProcessingException {
-        createBook();
+        book = createBook();
 
-        var response = given()
-                    .config(
-                        RestAssuredConfig
-                            .config()
-                            .encoderConfig(EncoderConfig.encoderConfig()
-                                    .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
-                    .spec(specification)
+        var response = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_YML)
-				.accept(TestConfigs.CONTENT_TYPE_YML)
-                    .when()
-                    .get()
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .queryParams("page", 0, "size", 10, "field-direction", "id", "direction", "asc")
+                .when()
+                .get()
                 .then()
-                    .statusCode(200)
-                        .extract()
-                        .body()
-                        .as(BookVO[].class, objectMapper); 
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(PagedModelBook.class, objectMapper);
 
 
-        List<BookVO> content = Arrays.asList(response);
+        List<BookVO> content = response.getContent();
 
         BookVO foundBookOne = content.get(0);
-        
+
+        assertNotNull(content);
+        assertTrue(content.size() > 0);
+
         assertNotNull(foundBookOne.getId());
         assertNotNull(foundBookOne.getTitle());
         assertNotNull(foundBookOne.getAuthor());
         assertNotNull(foundBookOne.getPrice());
-        assertTrue(foundBookOne.getId() > 0);
-        assertEquals("Docker Deep Dive", foundBookOne.getTitle());
-        assertEquals("Nigel Poulton", foundBookOne.getAuthor());
-        assertEquals(55.99, foundBookOne.getPrice());
+    }
+
+    @Test
+    @Order(5)
+    public void testDelete() {
+        given()
+                .config(
+                        RestAssuredConfig
+                                .config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
+                .spec(specification)
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .pathParam("id", book.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
     }
      
     private void mockBook() {

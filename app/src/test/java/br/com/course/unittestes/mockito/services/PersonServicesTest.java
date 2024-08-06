@@ -1,11 +1,12 @@
 package br.com.course.unittestes.mockito.services;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-
+import br.com.course.Validation.RequiredObjectIsNullException;
+import br.com.course.data.vo.v1.PersonVO;
+import br.com.course.mapper.Mapper;
+import br.com.course.model.Person;
+import br.com.course.repositories.PersonRepository;
+import br.com.course.services.PersonServices;
+import br.com.course.unittestes.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,14 +16,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 
-import br.com.course.data.vo.v1.PersonVO;
-import br.com.course.model.Person;
-import br.com.course.repositories.PersonRepository;
-import br.com.course.services.PersonServices;
-import br.com.course.Validation.RequiredObjectIsNullException;
-import br.com.course.unittestes.mapper.mocks.MockPerson;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +39,12 @@ class PersonServicesTest {
 	
 	@Mock
 	PersonRepository repository;
+
+	@Mock
+	private PagedResourcesAssembler<PersonVO> assembler;
+
+	@Mock
+	private Mapper mapper;
 	
 	@BeforeEach
 	void setUpMocks() throws Exception {
@@ -55,7 +65,7 @@ class PersonServicesTest {
 		assertNotNull(result.getLinks());
 		
 		assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
-		assertEquals("Addres Test1", result.getAddress());
+		assertEquals("Address Test1", result.getAddress());
 		assertEquals("First Name Test1", result.getFirstName());
 		assertEquals("Last Name Test1", result.getLastName());
 		assertEquals("Female", result.getGender());
@@ -81,7 +91,7 @@ class PersonServicesTest {
 		assertNotNull(result.getLinks());
 		
 		assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
-		assertEquals("Addres Test1", result.getAddress());
+		assertEquals("Address Test1", result.getAddress());
 		assertEquals("First Name Test1", result.getFirstName());
 		assertEquals("Last Name Test1", result.getLastName());
 		assertEquals("Female", result.getGender());
@@ -121,7 +131,7 @@ class PersonServicesTest {
 		assertNotNull(result.getLinks());
 		
 		assertTrue(result.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
-		assertEquals("Addres Test1", result.getAddress());
+		assertEquals("Address Test1", result.getAddress());
 		assertEquals("First Name Test1", result.getFirstName());
 		assertEquals("Last Name Test1", result.getLastName());
 		assertEquals("Female", result.getGender());
@@ -169,7 +179,7 @@ class PersonServicesTest {
 		assertNotNull(personOne.getLinks());
 		
 		assertTrue(personOne.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
-		assertEquals("Addres Test1", personOne.getAddress());
+		assertEquals("Address Test1", personOne.getAddress());
 		assertEquals("First Name Test1", personOne.getFirstName());
 		assertEquals("Last Name Test1", personOne.getLastName());
 		assertEquals("Female", personOne.getGender());
@@ -181,7 +191,7 @@ class PersonServicesTest {
 		assertNotNull(personFour.getLinks());
 		
 		assertTrue(personFour.toString().contains("links: [</api/person/v1/4>;rel=\"self\"]"));
-		assertEquals("Addres Test4", personFour.getAddress());
+		assertEquals("Address Test4", personFour.getAddress());
 		assertEquals("First Name Test4", personFour.getFirstName());
 		assertEquals("Last Name Test4", personFour.getLastName());
 		assertEquals("Male", personFour.getGender());
@@ -193,11 +203,9 @@ class PersonServicesTest {
 		assertNotNull(personSeven.getLinks());
 		
 		assertTrue(personSeven.toString().contains("links: [</api/person/v1/7>;rel=\"self\"]"));
-		assertEquals("Addres Test7", personSeven.getAddress());
+		assertEquals("Address Test7", personSeven.getAddress());
 		assertEquals("First Name Test7", personSeven.getFirstName());
 		assertEquals("Last Name Test7", personSeven.getLastName());
 		assertEquals("Female", personSeven.getGender());
-
 	}
-
 }

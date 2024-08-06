@@ -1,1 +1,1 @@
-## Seção 19: O Verbo PATCH
+## Seção 20: Query Params e Busca Paginada

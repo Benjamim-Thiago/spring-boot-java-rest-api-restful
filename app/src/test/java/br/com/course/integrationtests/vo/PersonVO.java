@@ -1,9 +1,8 @@
 package br.com.course.integrationtests.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import java.io.Serializable;
+
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class PersonVO implements Serializable {
@@ -11,17 +10,12 @@ public class PersonVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-
 	private String firstName;
-
 	private String lastName;
-
 	private String address;
-
 	private String gender;
-
 	private Boolean enabled;
-	
+
 	public PersonVO() {}
 
 	public Long getId() {
@@ -75,7 +69,7 @@ public class PersonVO implements Serializable {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((enabled == null) ? 0 : enabled.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
@@ -89,7 +83,7 @@ public class PersonVO implements Serializable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
