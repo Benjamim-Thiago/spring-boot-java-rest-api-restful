@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.course</groupId>
-	<artifactId>app</artifactId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>app</name>
+	<name>api</name>
 	<description>Spring Boot 3</description>
 	<url/>
 	<licenses>
