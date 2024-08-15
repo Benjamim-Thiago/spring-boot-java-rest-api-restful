@@ -1,1 +1,3 @@
-## Seção 21: Upload e Download de Arquivos
+## Seção 22: Dockerizando a Aplicação
+## Docker image
+### benjamimthiago/rest-with-spring-boot-erudio:latest
