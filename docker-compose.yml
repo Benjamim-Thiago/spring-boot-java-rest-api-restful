@@ -15,8 +15,8 @@ services:
   app_java:
     image: benjamimthiago/rest-with-spring-boot-erudio
     restart: always
-    build: ./app
-    working_dir: /app
+    build: ./api
+    working_dir: /api
     environment:
       TZ: America/Sao_Paulo
       SPRING.DATASOURCE.URL: jdbc:postgresql://db:5432/course_spring_boot
